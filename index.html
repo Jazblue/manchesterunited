@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manchester United, 30 Seasons at a Glance</title>
+  <style>
+:root {
+  --bg: #0f1115;
+  --panel: #171a21;
+  --panel-2: #1d2230;
+  --text: #f5f7fb;
+  --muted: #adb7c9;
+  --accent: #da291c;
+  --accent-2: #fbe122;
+  --good: #ff5e57;
+  --mid: #ff9f43;
+  --low: #57606f;
+  --border: #2d3444;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: linear-gradient(180deg, #0b0d12 0%, #11151d 100%);
+  color: var(--text);
+  font-family: Inter, Arial, sans-serif;
+}
+.page { max-width: 1200px; margin: 0 auto; padding: 32px 20px 60px; }
+.hero { margin-bottom: 24px; }
+.eyebrow { color: var(--accent-2); text-transform: uppercase; letter-spacing: .12em; font-size: 12px; }
+h1, h2 { margin: 0 0 12px; }
+.subhead, .note, #chartNote { color: var(--muted); max-width: 760px; }
+.card {
+  background: rgba(23, 26, 33, .95);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 14px 30px rgba(0,0,0,.2);
+}
+.controls { display: flex; gap: 14px; align-items: end; flex-wrap: wrap; }
+.controls label { display: grid; gap: 8px; color: var(--muted); font-size: 14px; }
+select, button {
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+button { cursor: pointer; }
+.summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+.summary-card {
+  background: rgba(23, 26, 33, .95);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+}
+.summary-card .label { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+.summary-card .value { font-size: 28px; font-weight: 700; }
+.chart { display: grid; grid-template-columns: repeat(30, minmax(32px, 1fr)); gap: 8px; align-items: end; min-height: 420px; margin-top: 20px; overflow-x: auto; padding: 22px 0 6px; }
+.bar-wrap { display: grid; grid-template-rows: 20px 1fr auto; align-items: end; justify-items: center; gap: 8px; min-width: 32px; }
+.bar {
+  width: 100%; min-height: 14px; border-radius: 10px 10px 4px 4px; position: relative;
+  display: flex; align-items: flex-start; justify-content: center; color: white; font-size: 11px; padding-top: 6px; overflow: visible;
+}
+.bar-value {
+  font-size: 12px; font-weight: 800; color: var(--text); white-space: nowrap; background: rgba(15,17,21,.9); padding: 1px 6px; border-radius: 6px; z-index: 2;
+}
+.bar.elite { background: linear-gradient(180deg, var(--good), #a31212); }
+.bar.solid { background: linear-gradient(180deg, var(--mid), #b85c00); }
+.bar.poor { background: linear-gradient(180deg, #6c7482, #38404c); }
+.bar-label { writing-mode: vertical-rl; transform: rotate(180deg); color: var(--muted); font-size: 11px; }
+.trophy-count {
+  position: absolute; top: -40px; background: var(--accent-2); color: #111; border-radius: 999px; padding: 2px 6px; font-size: 11px; font-weight: 700;
+}
+.legend { display: flex; gap: 16px; flex-wrap: wrap; color: var(--muted); font-size: 13px; margin-top: 16px; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+.dot.elite { background: var(--good); } .dot.solid { background: var(--mid); } .dot.poor { background: var(--low); }
+.timeline { display: flex; flex-wrap: wrap; gap: 8px; }
+.era { padding: 10px 12px; border-radius: 999px; background: var(--panel-2); border: 1px solid var(--border); font-size: 13px; }
+.valuation-list { display: grid; gap: 10px; }
+.valuation-item { display: grid; grid-template-columns: 90px 140px 1fr; gap: 12px; padding: 12px; border-radius: 12px; background: var(--panel-2); }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 12px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; }
+@media (max-width: 900px) { .summary-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) {
+  .summary-grid { grid-template-columns: 1fr; }
+  .valuation-item { grid-template-columns: 1fr; }
+  .page { padding: 24px 14px 50px; }
+}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <p class="eyebrow">1995-96 to 2024-25</p>
+      <h1>Manchester United, 30 Seasons at a Glance</h1>
+      <p class="subhead">League finish, trophies, managers, chairman era, and club value milestones in one clean stats page.</p>
+    </header>
+
+    <section class="controls card">
+      <label>
+        View
+        <select id="viewSelect">
+          <option value="league">League position</option>
+          <option value="trophies">Trophies won</option>
+        </select>
+      </label>
+      <label>
+        Filter
+        <select id="filterSelect">
+          <option value="all">All seasons</option>
+          <option value="trophy">Trophy-winning only</option>
+          <option value="top4">Top 4 only</option>
+        </select>
+      </label>
+      <button id="resetBtn">Reset</button>
+    </section>
+
+    <section class="summary-grid" id="summaryGrid"></section>
+
+    <section class="card chart-card">
+      <div class="chart-header">
+        <h2 id="chartTitle">League position by season</h2>
+        <p id="chartNote">Lower is better. Bars are scaled so stronger finishes sit higher visually.</p>
+      </div>
+      <div id="chart" class="chart"></div>
+      <div class="legend">
+        <span><i class="dot elite"></i> Title / top four strength</span>
+        <span><i class="dot solid"></i> European-chasing range</span>
+        <span><i class="dot poor"></i> Lower finish</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Manager era timeline</h2>
+      <div id="timeline" class="timeline"></div>
+    </section>
+
+    <section class="card">
+      <h2>Club value milestones</h2>
+      <p class="note">These are selected public anchor points, not a like-for-like annual valuation series.</p>
+      <div id="valuationList" class="valuation-list"></div>
+    </section>
+
+    <section class="card">
+      <h2>Season detail</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Season</th>
+              <th>Pos</th>
+              <th>Trophies</th>
+              <th>Manager</th>
+              <th>Chairman</th>
+            </tr>
+          </thead>
+          <tbody id="seasonTable"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script>
+const allSeasons = [{"season":"1995-96","league_position":1,"trophies":["Premier League","FA Cup"],"manager":"Alex Ferguson","chairman":"Martin Edwards"},{"season":"1996-97","league_position":1,"trophies":["Premier League","Community Shield"],"manager":"Alex Ferguson","chairman":"Martin Edwards"},{"season":"1997-98","league_position":2,"trophies":["Community Shield"],"manager":"Alex Ferguson","chairman":"Martin Edwards"},{"season":"1998-99","league_position":1,"trophies":["Premier League","FA Cup","Champions League"],"manager":"Alex Ferguson","chairman":"Martin Edwards"},{"season":"1999-2000","league_position":1,"trophies":["Premier League","Intercontinental Cup"],"manager":"Alex Ferguson","chairman":"Martin Edwards"},{"season":"2000-01","league_position":1,"trophies":["Premier League"],"manager":"Alex Ferguson","chairman":"Martin Edwards"},{"season":"2001-02","league_position":3,"trophies":[],"manager":"Alex Ferguson","chairman":"Martin Edwards"},{"season":"2002-03","league_position":1,"trophies":["Premier League","League Cup"],"manager":"Alex Ferguson","chairman":"Martin Edwards"},{"season":"2003-04","league_position":3,"trophies":["FA Cup","Community Shield"],"manager":"Alex Ferguson","chairman":"Roy Gardner"},{"season":"2004-05","league_position":3,"trophies":[],"manager":"Alex Ferguson","chairman":"Roy Gardner/Malcolm Glazer"},{"season":"2005-06","league_position":2,"trophies":["League Cup"],"manager":"Alex Ferguson","chairman":"Malcolm Glazer"},{"season":"2006-07","league_position":1,"trophies":["Premier League"],"manager":"Alex Ferguson","chairman":"Joel Glazer"},{"season":"2007-08","league_position":1,"trophies":["Premier League","Champions League","Community Shield"],"manager":"Alex Ferguson","chairman":"Joel Glazer"},{"season":"2008-09","league_position":1,"trophies":["Premier League","League Cup","Community Shield","FIFA Club World Cup"],"manager":"Alex Ferguson","chairman":"Joel Glazer"},{"season":"2009-10","league_position":2,"trophies":["League Cup"],"manager":"Alex Ferguson","chairman":"Joel Glazer"},{"season":"2010-11","league_position":1,"trophies":["Premier League","Community Shield"],"manager":"Alex Ferguson","chairman":"Joel Glazer"},{"season":"2011-12","league_position":2,"trophies":["Community Shield"],"manager":"Alex Ferguson","chairman":"Joel Glazer"},{"season":"2012-13","league_position":1,"trophies":["Premier League"],"manager":"Alex Ferguson","chairman":"Joel Glazer"},{"season":"2013-14","league_position":7,"trophies":["Community Shield"],"manager":"David Moyes/Ryan Giggs","chairman":"Joel Glazer"},{"season":"2014-15","league_position":4,"trophies":[],"manager":"Louis van Gaal","chairman":"Joel Glazer"},{"season":"2015-16","league_position":5,"trophies":["FA Cup"],"manager":"Louis van Gaal","chairman":"Joel Glazer"},{"season":"2016-17","league_position":6,"trophies":["League Cup","Community Shield","Europa League"],"manager":"José Mourinho","chairman":"Joel Glazer"},{"season":"2017-18","league_position":2,"trophies":[],"manager":"José Mourinho","chairman":"Joel Glazer"},{"season":"2018-19","league_position":6,"trophies":[],"manager":"José Mourinho/Ole Gunnar Solskjær","chairman":"Joel Glazer"},{"season":"2019-20","league_position":3,"trophies":[],"manager":"Ole Gunnar Solskjær","chairman":"Joel Glazer"},{"season":"2020-21","league_position":2,"trophies":[],"manager":"Ole Gunnar Solskjær","chairman":"Joel Glazer"},{"season":"2021-22","league_position":6,"trophies":[],"manager":"Ole Gunnar Solskjær/Michael Carrick/Ralf Rangnick","chairman":"Joel Glazer"},{"season":"2022-23","league_position":3,"trophies":["League Cup"],"manager":"Erik ten Hag","chairman":"Joel Glazer"},{"season":"2023-24","league_position":8,"trophies":["FA Cup"],"manager":"Erik ten Hag","chairman":"Joel Glazer"},{"season":"2024-25","league_position":15,"trophies":[],"manager":"Erik ten Hag/Ruud van Nistelrooy/Rúben Amorim","chairman":"Joel Glazer/Avram Glazer"}];
+const valuations = [{"year":1998,"label":"BSkyB bid","value":"£623m","type":"bid"},{"year":2004,"label":"Market value reference","value":"£741m","type":"market"},{"year":2005,"label":"Glazer takeover","value":"~£800m","type":"takeover"},{"year":2007,"label":"Forbes valuation","value":"$1.453bn","type":"forbes"},{"year":2010,"label":"Forbes valuation","value":"$1.835bn","type":"forbes"},{"year":2012,"label":"Forbes valuation","value":"$2.235bn","type":"forbes"},{"year":2014,"label":"Forbes valuation","value":"$3.44bn","type":"forbes"},{"year":2017,"label":"Forbes valuation","value":"$3.69bn","type":"forbes"},{"year":2018,"label":"Forbes valuation","value":"$4.123bn","type":"forbes"},{"year":2021,"label":"Forbes valuation","value":"$4.2bn","type":"forbes"},{"year":2022,"label":"Forbes valuation","value":"$4.6bn","type":"forbes"},{"year":2023,"label":"Forbes valuation","value":"$6.0bn","type":"forbes"},{"year":2024,"label":"Forbes valuation","value":"$6.55bn","type":"forbes"},{"year":2025,"label":"Forbes valuation","value":"$6.6bn","type":"forbes"}];
+
+const summaryGrid = document.getElementById('summaryGrid');
+const chart = document.getElementById('chart');
+const seasonTable = document.getElementById('seasonTable');
+const timeline = document.getElementById('timeline');
+const valuationList = document.getElementById('valuationList');
+const viewSelect = document.getElementById('viewSelect');
+const filterSelect = document.getElementById('filterSelect');
+const resetBtn = document.getElementById('resetBtn');
+const chartTitle = document.getElementById('chartTitle');
+const chartNote = document.getElementById('chartNote');
+
+function managerBuckets(data) {
+  const counts = new Map();
+  data.forEach(item => {
+    const lead = item.manager.split('/')[0].trim();
+    counts.set(lead, (counts.get(lead) || 0) + 1);
+  });
+  return [...counts.entries()];
+}
+function filteredData() {
+  let data = [...allSeasons];
+  if (filterSelect.value === 'trophy') data = data.filter(x => x.trophies.length > 0);
+  if (filterSelect.value === 'top4') data = data.filter(x => x.league_position <= 4);
+  return data;
+}
+function getBarClass(item, view) {
+  const value = view === 'league' ? item.league_position : item.trophies.length;
+  if (view === 'league') {
+    if (value <= 4) return 'elite';
+    if (value <= 8) return 'solid';
+    return 'poor';
+  }
+  if (value >= 2) return 'elite';
+  if (value === 1) return 'solid';
+  return 'poor';
+}
+function renderSummary(data) {
+  const bestFinish = Math.min(...data.map(x => x.league_position));
+  const totalTrophies = data.reduce((sum, x) => sum + x.trophies.length, 0);
+  const managers = managerBuckets(data).sort((a, b) => b[1] - a[1]);
+  const avgPos = (data.reduce((sum, x) => sum + x.league_position, 0) / data.length).toFixed(1);
+  const cards = [
+    ['Best league finish', `${bestFinish}${bestFinish === 1 ? 'st' : ''}`],
+    ['Total trophies', totalTrophies],
+    ['Most common manager', managers[0]?.[0] || 'N/A'],
+    ['Average league position', avgPos]
+  ];
+  summaryGrid.innerHTML = cards.map(([label, value]) => `<div class="summary-card"><div class="label">${label}</div><div class="value">${value}</div></div>`).join('');
+}
+function renderChart(data) {
+  const view = viewSelect.value;
+  chartTitle.textContent = view === 'league' ? 'League position by season' : 'Trophies won by season';
+  chartNote.textContent = view === 'league' ? 'Lower is better. Bars are scaled so stronger finishes sit higher visually.' : 'Bar height represents total trophies won that season.';
+  chart.innerHTML = data.map(item => {
+    const raw = view === 'league' ? item.league_position : item.trophies.length;
+    const height = view === 'league' ? ((21 - item.league_position) / 20) * 320 : Math.max(item.trophies.length * 70, 14);
+    const title = `${item.season}\nPosition: ${item.league_position}\nTrophies: ${item.trophies.join(', ') || 'None'}\nManager: ${item.manager}\nChairman: ${item.chairman}`;
+    return `<div class="bar-wrap" title="${title}"><div class="bar-value">${raw}</div><div class="bar ${getBarClass(item, view)}" style="height:${height}px">${item.trophies.length ? `<span class="trophy-count">${item.trophies.length}</span>` : ''}</div><div class="bar-label">${item.season}</div></div>`;
+  }).join('');
+}
+function renderTable(data) {
+  seasonTable.innerHTML = data.map(item => `<tr><td>${item.season}</td><td>${item.league_position}</td><td>${item.trophies.join(', ') || 'None'}</td><td>${item.manager}</td><td>${item.chairman}</td></tr>`).join('');
+}
+function renderTimeline() {
+  const eras = [];
+  let current = null;
+  allSeasons.forEach(item => {
+    const leadManager = item.manager.split('/')[0].trim();
+    if (!current || current.manager !== leadManager) {
+      current = { manager: leadManager, from: item.season, to: item.season };
+      eras.push(current);
+    } else {
+      current.to = item.season;
+    }
+  });
+  timeline.innerHTML = eras.map(era => `<div class="era">${era.manager}, ${era.from} to ${era.to}</div>`).join('');
+}
+function renderValuations() {
+  valuationList.innerHTML = valuations.map(item => `<div class="valuation-item"><strong>${item.year}</strong><span>${item.value}</span><span>${item.label}</span></div>`).join('');
+}
+function render() {
+  const data = filteredData();
+  renderSummary(data);
+  renderChart(data);
+  renderTable(data);
+}
+renderTimeline();
+renderValuations();
+render();
+viewSelect.addEventListener('change', render);
+filterSelect.addEventListener('change', render);
+resetBtn.addEventListener('click', () => { viewSelect.value = 'league'; filterSelect.value = 'all'; render(); });
+  </script>
+</body>
+</html>
